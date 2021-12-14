@@ -46,3 +46,25 @@ select sysdate from dual;
 select user from dual;
 ----
 
+==== Expressions (Ausdrücke)
+
+Nummerische Ausdrücke
+
++-*/mod
+
+[source,sql]
+----
+select amount+2 from penalties;
+select 3+4*2 from dual;
+select mod(13,5) from dual;
+----
+
+Alphanummerische Ausdrücke (CONCAT)
+
+[source,sql]
+----
+select 'Hello World' || 'in HTL' from dual;
+select concat('Hello World','in HTL') from dual;
+-- Abb 13
+select upper(substr('Oracle Substring',1,6)) from dual;
+----
