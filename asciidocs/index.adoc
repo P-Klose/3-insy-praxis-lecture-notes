@@ -68,3 +68,106 @@ select concat('Hello World','in HTL') from dual;
 -- Abb 13
 select upper(substr('Oracle Substring',1,6)) from dual;
 ----
+
+== 2021.12.21
+
+=== NULL Operator
+
+//Abb 20
+Wichtig immer mit IS [NOT] NULL abfragen = oder != funktioniert nicht
+
+|===
+|If a is:
+|Condition
+|Evaluates to:
+
+|10
+|a IS NULL
+|FALSE
+|10
+|a IS NOT NULL
+|TRUE
+|NULL
+|a IS NULL
+|TRUE
+|NULL
+|a IS NOT NULL
+|FALSE
+|10
+|a = NULL
+|UNKNOWN
+|10
+|a != NULL
+|UNKNOWN
+|NULL
+|a = NULL
+|UNKNOWN
+|NULL
+|a != NULL
+|UNKNOWN
+|NULL
+|a = 10
+|UNKNOWN
+|NULL
+|a != 10
+|UNKNOWN
+
+|===
+
+==== Bsp: Ausgabe der Turnierspieler
+
+[source,sql]
+----
+select * from players where leagueno IS NOT NULL;
+----
+
+=== IN Operator mit Subquery
+
+Vorteile:
+
+* Aktualität
+
+==== Bsp: Ausgabe der Spieler, die mindestens eine Straft, erhalten haben
+
+Variante 1 ohne Subquery (FALSCH)
+
+[source,sql]
+----
+select distinct playerno from penalties;
+select * from players where playerno in (6,8,27,44,104);
+----
+
+Variante 2 mit Subquery (RICHTIG)
+
+[source,sql]
+----
+select * from players where playerno in (select playerno from penalties);
+--in der Klammer mit oder ohne distinct
+----
+
+==== Bsp: Ausgabe der Playerno, name und initials der Spieler, die mindestens ein match gewonnen haben
+
+[source,sql]
+----
+select playerno,name,initials from players where playerno in (select playerno from matches where won >= 1);
+----
+
+INS_SQL-Uebun3.sql
+
+=== Vergleichsoperator mit Subquery
+
+Syntax
+
+[source,sql]
+----
+expression comparison_operator (subquery);
+----
+
+Der Vergleich mit Subqueries, darf das Subquery nur 1 Zeile leifern.
+
+==== Bsp: Ausgabe der Playerno und name der Spieler, die älter als R.Parmenter sind?
+
+[source,sql]
+----
+select playerno, name from players where year_of_birth < (select year_of_birth from players where name like 'Parmenter' and initials like 'R');
+----
