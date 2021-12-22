@@ -77,41 +77,47 @@ select upper(substr('Oracle Substring',1,6)) from dual;
 Wichtig immer mit IS [NOT] NULL abfragen = oder != funktioniert nicht
 
 |===
-|If a is:
-|Condition
-|Evaluates to:
+|If a is: |Condition |Evaluates to:
 
 |10
 |a IS NULL
 |FALSE
+
 |10
 |a IS NOT NULL
 |TRUE
+
 |NULL
 |a IS NULL
 |TRUE
+
 |NULL
 |a IS NOT NULL
 |FALSE
+
 |10
 |a = NULL
 |UNKNOWN
+
 |10
 |a != NULL
 |UNKNOWN
+
 |NULL
 |a = NULL
 |UNKNOWN
+
 |NULL
 |a != NULL
 |UNKNOWN
+
 |NULL
 |a = 10
 |UNKNOWN
+
 |NULL
 |a != 10
 |UNKNOWN
-
 |===
 
 ==== Bsp: Ausgabe der Turnierspieler
@@ -171,3 +177,62 @@ Der Vergleich mit Subqueries, darf das Subquery nur 1 Zeile leifern.
 ----
 select playerno, name from players where year_of_birth < (select year_of_birth from players where name like 'Parmenter' and initials like 'R');
 ----
+
+
+== 2021.12.22
+
+=== Die Operatoren ALL und ANY
+
+Syntax:
+
+[source,sql]
+----
+expression comparison_operator ALL (subquery);
+expression comparison_operator ANY (subquery);
+----
+
+expression comparison_operator ALL (subquery)
+expression comparison_operator ANY (subquery)
+
+==== Hinweis:
+
+Ausdruck mit ALL leifert TRUE, wenn:
+
+* der Vergleich mit allen Zeilen des Subqueries erfüllt ist
+* das Subquery keine Zeilen liefert
+sonst FALSE
+
+Ausdruck mit ANY leifert FALSE, wenn:
+
+* der Vergleich mit keiner Zeilen des Subqueries erfüllt ist
+* das Subquery keine Zeilen liefert
+sonst TRUE
+
+==== Vergeleich:
+IN (subquery) <-> = ANY (subquery)
+NOT IN (subquery) <-> <> ALL (subquery)
+
+==== Bsp: Ausgabe von playerno, name der Spieler, year_of_birt des ältesten Spielers
+
+[source,sql]
+----
+select playerno, name, year_of_birth from players where year_of_birth <= All(select year_of_birth from players);
+----
+
+=== Operator EXISTS
+
+==== Syntax:
+
+[source,sql]
+----
+[NOT] exists (subquery);
+----
+
+==== Hinweis:
+
+Ausdruck liefert TRUE, wenn:
+
+* die Subquerie mindestens eine Zeiel liefert
+sonst immer FALSE
+
+IMPORTANT: ENDE TEST STOFF
