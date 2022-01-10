@@ -17,6 +17,28 @@ ifdef::backend-html5[]
 == INSY Praxis
 
 === Create Tables
+
+Syntax:
+
+[source,sql]
+----
+create table table_name (
+                 column_name data_type [default expression] [column integrity rule]
+      [, column_name ....,
+                  ....]
+  );
+----
+
+==== Bsp: Erzeugen der Tabelle Players
+
+[source,sql]
+----
+create table Players
+(PlayerNo number(4) not null,
+ Name varchar2(15),
+ date_of_birth date,
+ leagueno varchar2(4));
+----
 //Abb4
 //Abb5
 === Copying tables
