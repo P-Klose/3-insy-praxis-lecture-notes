@@ -258,9 +258,53 @@ Ausdruck liefert TRUE, wenn:
 * die Subquerie mindestens eine Zeiel liefert
 sonst immer FALSE
 
-IMPORTANT: ENDE TEST STOFF
+IMPORTANT: ENDE TEST01 STOFF
 
 == 2022.01.18
 
 === Testkorrektur
 
+== 2022.01.19
+
+=== ORDER BY Klausel
+
+==== Syntax:
+
+[source,sql]
+----
+ORDER BY expression [ASC | DESC] [,expression ....];
+
+select playerNo from players ORDER BY playerNo;
+select
+----
+
+NULL immer höchste Wert
+
+==== Bsp:
+
+[source,sql]
+----
+select name, initials from players order by name ASC, initials DESC;
+--oder
+select name, initials from players order by 1 ASC, 2 DESC;
+----
+
+=== GROUP BY und HAVING Klausel
+
+Mit Hilfe der *GROUP BY* Klausel werden Zeilen auf Grund der gleichen Eigenschaften gruppiert, mit Hilfe der *HAVING* können Bedingungen bezüglich der Gruppen gesetzt werden.
+
+==== Bsp: Anzahl der Spieler in jeder Stadt
+[source,sql]
+----
+select town,count(*) as Anzahl from players GROUP by town;
+----
+
+==== Bsp: Anzahl der Strafen pro Jahr
+[source,sql]
+----
+select to_char(pen_date,'YYYY'), sum(amount) from penalties GROUP BY to_char(pen_date,'YYYY');
+--Vorsicht Falsch:
+select to_char(pen_date,'YYYY'), sum(amount) from penalties GROUP BY pen_date;
+----
+
+INS_SQL-Übung5.sql
