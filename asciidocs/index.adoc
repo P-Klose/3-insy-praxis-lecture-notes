@@ -308,3 +308,53 @@ select to_char(pen_date,'YYYY'), sum(amount) from penalties GROUP BY pen_date;
 ----
 
 INS_SQL-Übung5.sql
+
+== 2022.01.25
+
+=== Der JOIN
+
+Ein Select Statement wird als *JOIN* bezeichnet wenn in der *FROM* Klausel mindestens 2 Tabellen angegeben werden und die *WHERE* Klausel mindestens eine Bedingung enthält, die die Spalten der Tabellen verbinden.
+
+Ohne Angabe der *JOIN-Bedingung*: karthesisches Produkt (jedes mit jedem)
+
+[source,sql]
+----
+select * from players, penalties;
+--112 Rows
+----
+
+* 112 Rows
+* weil 14 Rows (Players) * 8 Rows (Penalties)
+
+
+==== Bsp: Ausgabe von Playerno,Name und Amount
+[source,sql]
+----
+select penalties.playerno, name,amount
+from players,penalties
+where players.playerno = penalties.playerno;
+--oder
+select players.playerno, name,amount
+from players,penalties
+where players.playerno = penalties.playerno;
+--oder
+select pl.playerno, pl.name, pe.amount
+from players pl,penalties pe
+where pl.playerno = pe.playerno;
+----
+
+==== Bsp: Gleiche Spieler zusammengefasst
+[source,sql]
+----
+select pl.playerno, pl.name, sum(pe.amount)
+from players pl,penalties pe
+where pl.playerno = pe.playerno group by playerno,name;
+----
+
+IMPORTANT: Obriges Bsp ist noch nicht fertig!
+
+
+//==== Bsp:
+//[source,sql]
+//----
+//----
