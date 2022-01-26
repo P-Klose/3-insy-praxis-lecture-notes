@@ -348,10 +348,18 @@ where pl.playerno = pe.playerno;
 ----
 select pl.playerno, pl.name, sum(pe.amount)
 from players pl,penalties pe
-where pl.playerno = pe.playerno group by playerno,name;
+where pl.playerno = pe.playerno
+group by pl.playerno,pl.name;
 ----
 
-IMPORTANT: Obriges Bsp ist noch nicht fertig!
+== 2022.01.26
+
+Der am häufigsten verwendete Jointyp ist der *EQUIJOIN* (Vergleichsoperator =)
+
+=== JOINTYPEN
+
+Siehe JOIN_neu.pdf
+
 
 
 //==== Bsp:
