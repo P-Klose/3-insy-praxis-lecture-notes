@@ -360,6 +360,51 @@ Der am häufigsten verwendete Jointyp ist der *EQUIJOIN* (Vergleichsoperator =)
 
 Siehe JOIN_neu.pdf
 
+== 2022.02.08
+
+=== Das Subquery (Innerselect)
+
+Wieder ein *SELECT* innerhalb der Bedingung
+
+- keine *ORDER BY* im Subquery
+
+==== Suchreihenfolge
+
+. Sucher der Columns im Subquery
+. Wenn nicht vorhanden, suche im Übergeordneten Select
+
+Trick:
+Alias-Name
+
+==== Bsp:
+Ausgabe von Spielernummer, Spielername derjenigen Spieler, die mindestens eine Strafe erhlaten haben?
+
+[source,sql]
+----
+select playerno, name
+from players pl
+natural join penalties pe
+group by playerno,name
+having count(pe.amount) >= 1;
+----
+
+==== Bsp:
+Ausgabe der Spieler mit den vier höchsten Strafen.
+
+[source,sql]
+----
+select pl.playerno, name, amount
+from players pl, penalties pe
+where pl.playerno = pe.playerno
+and 4 > (select count(*)
+         from penalties
+         where amount > pe.amount);
+----
+
+
+
+
+
 
 
 //==== Bsp:
