@@ -414,15 +414,115 @@ where pl.playerno = pe.playerno
 and 4 > (select count(*)
          from penalties
          where amount > pe.amount);
+-- Mit alter JOIN schreibseise
+----
+
+== 2022.02.15
+
+==== Bsp:
+Ausgabe der Spieler, die mindestens eine Strafe über 50,00 erhalten haben.
+
+[source,sql]
+----
+select playerno, name
+from players p
+where exists (
+    select *
+    from penalties
+    where playerno = p.playerno
+    and amount > 50);
+----
+
+==== Bsp:
+Ausgabe der Spieler, für die jede Strafe über 50,00 war (keine Strafe unter 50,00)
+
+[source,sql]
+----
+select playerno, name
+from players p
+where not exists (
+    select *
+    from penalties
+    where playerno = p.playerno
+    and amount <= 50);
+----
+
+==== Bsp:
+
+IMPORTANT: Bsp 26 noch nacheinfügen
+
+[source,sql]
+----
+----
+=== Kombination von Selectstatements:
+
+UNION, INTERSECT, MINUS == Vereinigung, Durchschnitt, Differenz
+
+//image::images/minus-intct-union.jpeg[]
+
+==== UNION
+UNION: identische Zeilen aus dem Ergebnis streichen
+UNION ALL: identische Zeilen werden nicht aus dem Ergebnis streichen
+
+IMPORTANT: Bilder von https://www.oracletutorial.com/oracle-basics/ noch nacheinfügen
+
+MINUS:
+INTERSECT:
+
+==== Bsp:
+Ausgabe sämtlicher Spieler mit ihren Strafen.
+
+[source,sql]
+----
+SELECT name, initials, amount
+FROM players pl, penalties pe
+WHERE pl.playerno = pe.playerno
+UNION
+SELECT name, initials, 0
+FROM players pl
+WHERE NOT EXISTS
+    (SELECT *
+    FROM penalties pe
+    WHERE pe.playerno=pl.playerno);
+----
+
+==== Bsp:
+Ausgabe sämtlicher Spieler mit ihren Strafensummen
+
+[source,sql]
+----
+SELECT name, initials, SUM(amount)
+FROM players pl, penalties pe
+WHERE pl.playerno = pe.playerno
+GROUP BY name, initials
+UNION
+SELECT name, initials, 0
+FROM players pl
+WHERE NOT EXISTS
+    (SELECT *
+    FROM penalties pe
+    WHERE pe.playerno=pl.playerno);
+----
+
+==== CONNECT BY Klausel
+Wird zur Abfrage von hierarchischen strukturierten Daten verwendet
+Baumstruktur
+==== Syntax:
+
+[source,sql]
+----
+CONNECT BY [PRIOR] condition [START WITH condition]
 ----
 
 
 
 
+[source,sql]
+----
 
+----
 
+[source,sql]
+----
 
-//==== Bsp:
-//[source,sql]
-//----
-//----
+----
