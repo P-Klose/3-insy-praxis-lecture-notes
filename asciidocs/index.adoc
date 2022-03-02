@@ -507,6 +507,7 @@ WHERE NOT EXISTS
 ==== CONNECT BY Klausel
 Wird zur Abfrage von hierarchischen strukturierten Daten verwendet
 Baumstruktur
+
 ==== Syntax:
 
 [source,sql]
@@ -559,6 +560,63 @@ select LPAD(' ',6*(LEVEL-1))||level||'  '||sub||'-'||'-'||super||'-'||price as "
 from parts
 connect by PRIOR sub = super;
 ----
+
+== 2022.03.02
+
+=== Daten manipulieren
+
+==== Einfügen (INSERT)
+
+[source,sql]
+----
+INSERT INTO table_name [(col_name1, col_name2,...)]
+VALUES ()
+--UNFINISHED
+----
+
+//Abb 31 INSERT Statement
+//Abb 32
+//Abb 33 Masseninsert
+
+[source,sql]
+----
+INSERT INTO table_name [(col_name1, col_name2,...)]
+SELECT ...
+----
+Datentypen müssen übereinstimmen
+
+==== Ändern
+
+==== Syntax:
+
+[source,sql]
+----
+UPDATE table_name
+SET col_name1 = expression | subquery
+[,col_name2 = expression | subquery, ...]
+[WHERE condition]
+----
+
+==== Bsp
+//Abb 34
+[source,sql]
+----
+update parts set price = 100 where sub = 'P5';
+update parts set price = PRICE* 1.1 where sub = 'P5';
+update parts set price = price * 0.9 where price > 60;
+update parts set price = price * 1.2 where price < (select avg(price) from parts);
+----
+
+==== Löschen
+
+//Abb 35
+
+DELETE ... DML löscht nur die Daten, kann zurückgerollt werden (ROLLBACK)
+DROP ... DDL DataDefinitionLanguage Alles wird gelöscht, kann NICHT zurückgerollt werden
+TRUNCATE TABLE... DDL, gibt Speicherplatz frei, WHERE nicht möglich kann nicht zurückgerollt werden (für große Datenmengen)
+
+
+IMPORTANT: SQL 7 (15.3, UNION, INTERSECT, MINUS, INTERSECT, SUBSELECTS)
 
 
 
