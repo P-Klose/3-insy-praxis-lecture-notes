@@ -514,13 +514,56 @@ Baumstruktur
 CONNECT BY [PRIOR] condition [START WITH condition]
 ----
 
+//Abb 29
+//Abb 30 ist eine Stückliste die Tabelle
 
+== 2022.02.16
 
+Einschub: Datum umsetzten
 
 [source,sql]
 ----
-
+alter session set nls_date_format = 'DD-MON-YYYY HH24:MI:SS'
 ----
+
+==== Bsp
+Ermittle die Teile aus denen P3 besteht
+
+[source,sql]
+----
+select * from parts connect by sub = super;
+
+select * from parts connect by sub = super start with super='P3';
+--START WITH: alle Bedingungen möglich
+----
+
+Unterschied zwischen START WITH (PRIOR) und WHERE:
+
+WHERE entfernt nur die ihr entsprechenden DS, keine Kind-DS
+
+==== Bsp
+
+[source,sql]
+----
+select * from parts connect by sub = super start with super='P3';
+
+select * from parts connect by PRIOR sub = super start with super='P3';
+----
+
+Systemvariable: LEVEL, Stufennummer beginnend mit 1
+Skalarfunktion: LPAD
+
+[source,sql]
+----
+select LPAD(' ',6*(LEVEL-1))||level||'  '||sub||'-'||'-'||super||'-'||price as "PartsTree"
+from parts
+connect by PRIOR sub = super;
+----
+
+
+
+
+
 
 [source,sql]
 ----
