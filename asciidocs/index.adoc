@@ -619,8 +619,110 @@ TRUNCATE TABLE... DDL, gibt Speicherplatz frei, WHERE nicht möglich kann nicht 
 IMPORTANT: SQL 7 (15.3, UNION, INTERSECT, MINUS, INTERSECT, SUBSELECTS)
 
 
+== 2022.03.23
+
+=== Nummerfolgen (Sequenzen)
+
+Verwendet für Primary Key (künstlichen Schlüssel)  SOZVERS *nicht* künstlich
+
+==== Variante 1: max
+//Abb 37
+[source,sql]
+----
+SELECT MAX(teamno)+1 FROM teams;
+INSERT INTO teams VALUES (...);
+----
+
+==== Variante 2: eigene Nummerntabelle
+//Abb 38
+[source,sql]
+----
+SELECT MAX(teamno)+1 FROM teams;
+INSERT INTO teams VALUES (...);
+INSERT INTO teamNo VALUES (...);
+----
+
+==== Variante 3: Nummerntabelle für sämtliche Tabellen
+//Abb 39
+[source,sql]
+----
+--Anlegen einer Tabelle: seq(Tablename, NextFreeID)
+SELECT NextFreeID FROM Seq WHERE tablename = 'TEAMS';
+UPDATE seq SET NextFreeID+1 WHERE tablename = 'TEAMS';
+INSERT INTO teams VALUES (...);
+----
+
+==== Lösung
+Eigene Sequenz
+
+[source,sql]
+----
+CREATE SEQUENCE seq_name
+[START WITH integer]        -- by default = 1
+[INCREMENT BY integer]      -- by default = 0
+[{MAXVALUE integer | NOMAXVALUE}]
+[{MINVALUE integer | NOMINVALUE}]
+[{CYCLE | NOCYCLE}]
+[{ORDER] | NOORDER}]
+[{CACHE integer | NOCACHE}]
+----
+
+* Increment by: default (1), auch negativ möglich
+* START WITH: Anfangswert (1)
+* MINVALUE, MAXVALUE: Mindest und Höchstwert (limit: ca 10^27)
 
 
+Pseudospalten: NEXTVAL, CURVAL
+Auslesen:
+
+[source,sql]
+----
+select seq_name.CURVAL from dual;
+----
+
+===== Bsp:
+
+[source,sql]
+----
+create sequence seq teamno start with 3;
+INSERT INTO TEAMS(teamno, playerno, division)
+VALUES (seq_teamno.NEXTVAL,104,'first');
+----
+
+// Abb 42 weiteres Bsp
+
+===== Bearbeiten:
+
+[source,sql]
+----
+ALTER SEQUENCE seq_name
+[INCREMENT BY integer]
+[{MAXVALUE integer | NOMAXVALUE}]
+[{MINVALUE integer | NOMINVALUE}]
+[{CYCLE | NOCYCLE}]
+[{ORDER | NOORDER}]
+[{CACHE integer | NOCACHE}]
+----
+
+===== Löschen:
+
+[source,sql]
+----
+DROP SEQUENCE seq_name;
+----
+
+
+Hinweis:
+
+Alles was Oracle sich abspeichert ist in Data-Dictionary
+
+[source,sql]
+----
+select * from USER_SEQUNECES; -- (Data-Dictionary)
+select * from DBA_SEQUENCES; -- (geht nur als Datenbankadministrator)
+----
+
+//Aufgabe SQL 10
 
 
 [source,sql]
