@@ -725,6 +725,87 @@ select * from DBA_SEQUENCES; -- (geht nur als Datenbankadministrator)
 //Aufgabe SQL 10
 
 
+== 2022.03.29
+
+=== Integrity Rules (Constaints)
+
+==== Syntax
+
+[source,sql]
+----
+CREATE TABLE table_name (
+    column_name data_type [DEFAULT expression] [column_constraint]
+    [, column_name ...]
+    [, table_constraint, ....]
+)
+
+--nachträglich:
+ALTER TABLE table_name
+ADD (table_constraint)
+----
+
+Erzwingen Regeln:
+
+* NOT NULL
+* PK        ... Primary Key
+* UNIQUE
+* FK        ... Foreign Key
+* CHECK
+
+//Abb 45
+
+==== NOT NULL
+
+[source,sql]
+----
+CREATE TABLE table_name (
+    column_name .... [CONSTRAINT constraint_name] NOT NULL
+);
+
+--ist ein column constraint
+----
+
+Name des CONSTRAINT, wenn nicht angegeben wird von Oracle vergeben. (SYS_Cnnnnnnnn)
+
+==== PK Primary Key
+
+[source,sql]
+----
+CREATE TABLE table_name (
+    column_name .... [CONSTRAINT constraint_name] PRIMARY KEY
+);
+CREATE TABLE table_name (
+    column_name ....,
+    [CONSTRAINT constraint_name]
+    PRIMARY KEY(column_name1 [,column_name2, ...])
+);
+--name meistens mit PK_
+----
+
+Eigenschaften (automatisch gesetzt):
+
+* eindeutig *UNIQUE*
+* **NOT NULL**
+
+column integrity nur möglich wenn, PK aus einer Spalte besteht.
+
+====
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 [source,sql]
 ----
 
