@@ -1,0 +1,13 @@
+@startuml
+
+class Produkt {
+produktnr: int
+name: String
+}
+class Rechnung {
+rechnungsnr: int
+
+}
+
+
+@enduml

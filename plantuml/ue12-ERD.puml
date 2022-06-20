@@ -1,0 +1,17 @@
+@startuml
+
+class Kurs
+class Veranstaltung
+class Referent
+class Teilnehmer
+
+
+Kurs "0..1" -- "1" Kurs
+Kurs "1" -- "*" Veranstaltung
+
+Veranstaltung_Referent .. (Veranstaltung,Referent)
+
+Veranstaltung_Teilnehmner .. (Veranstaltung,Teilnehmer)
+
+
+@enduml
